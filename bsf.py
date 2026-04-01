@@ -76,7 +76,7 @@ class BSF(Survival):
         elif self.roi_type == "roi-a":
             nd_idx = find_non_dominated(F)
 
-            w = np.ones(F.shape[1]) / F.shape[1]
+            w = np.ones(F.shape[1], dtype=float)
 
             asf_arr = asf(F[nd_idx], ref_point, w)
 

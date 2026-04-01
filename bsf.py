@@ -73,23 +73,23 @@ class BSF(Survival):
             dist_to_pivot = np.linalg.norm(F - pivot_point, axis=1)
             return sel_mask, dist_to_pivot
 
-    elif self.roi_type == "roi-a":
-        nd_idx = find_non_dominated(F)
+        elif self.roi_type == "roi-a":
+            nd_idx = find_non_dominated(F)
 
-        w = np.ones(F.shape[1]) / F.shape[1]
+            w = np.ones(F.shape[1]) / F.shape[1]
 
-        asf_arr = asf(F[nd_idx], ref_point, w)
+            asf_arr = asf(F[nd_idx], ref_point, w)
 
-        pivot_local_idx = np.argmin(asf_arr)
-        pivot_idx = nd_idx[pivot_local_idx]
-        pivot_point = F[pivot_idx]
+            pivot_local_idx = np.argmin(asf_arr)
+            pivot_idx = nd_idx[pivot_local_idx]
+            pivot_point = F[pivot_idx]
 
-        dist_arr_pivot = F - pivot_point
+            dist_arr_pivot = F - pivot_point
 
-        val = np.sum((dist_arr_pivot / roi_radius) ** 2, axis=1)
-        sel_mask = val <= 1.0
-        dist_to_pivot = np.linalg.norm(F - pivot_point, axis=1)
-    return sel_mask, dist_to_pivot
+            val = np.sum((dist_arr_pivot / roi_radius) ** 2, axis=1)
+            sel_mask = val <= 1.0
+            dist_to_pivot = np.linalg.norm(F - pivot_point, axis=1)
+            return sel_mask, dist_to_pivot
         elif self.roi_type == "roi-p":
             less_eq = np.all(F <= ref_point, axis=1)
             greater_eq = np.all(F >= ref_point, axis=1)

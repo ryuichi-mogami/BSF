@@ -1,5 +1,5 @@
 job_pymoo.sh
-submit_job_pymoo.sh
+submit_job_pymoo.py
 results_ref1/
 results_ref2/
 output/

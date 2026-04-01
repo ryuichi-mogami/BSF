@@ -81,7 +81,8 @@ class BSF(Survival):
             w = np.ones_like(F)
             asf_arr = asf(F[nd_idx], ref_point, w)
 
-            pivot_idx = np.argmin(asf_arr)
+            pivot_local_idx = np.argmin(asf_arr)
+            pivot_idx = nd_idx[pivot_local_idx]
             pivot_point = F[pivot_idx]
 
             dist_arr_pivot = F - pivot_point

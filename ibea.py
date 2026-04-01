@@ -83,10 +83,6 @@ class FitnessAssignment(Survival):
         
         return Population.create(*survivors)
 
-# ---------------------------------------------------------------------------------------------------------
-# Binary Tournament
-# ---------------------------------------------------------------------------------------------------------
-
 
 def binary_tournament(pop, P, algorithm, **kwargs):
     n_tournaments, n_parents = P.shape
@@ -114,10 +110,6 @@ def binary_tournament(pop, P, algorithm, **kwargs):
 
     return S[:, None].astype(int, copy=False)
 
-# ---------------------------------------------------------------------------------------------------------
-# Algorithm
-# ---------------------------------------------------------------------------------------------------------
-
 class IBEA(GeneticAlgorithm):
 
     def __init__(self,
@@ -133,19 +125,6 @@ class IBEA(GeneticAlgorithm):
                  normalize=True,
                  output=MultiObjectiveOutput(),
                  **kwargs):
-        """
-
-        Parameters
-        ----------
-        pop_size : {pop_size}
-        sampling : {sampling}
-        selection : {selection}
-        crossover : {crossover}
-        mutation : {mutation}
-        eliminate_duplicates : {eliminate_duplicates}
-        n_offsprings : {n_offsprings}
-
-        """
         super().__init__(pop_size=pop_size,
                          sampling=sampling,
                          selection=selection,

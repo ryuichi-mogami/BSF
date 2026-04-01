@@ -51,6 +51,28 @@ python3 test_pymoo.py \
 
 ---
 
+## Visualization
+
+BSF also provides a visualization script for inspecting the relationship between the obtained solutions, reference points, and the corresponding regions of interest.
+
+For example, the following command generates a plot for a two-objective DTLZ2 problem:
+
+```bash
+python3 plot.py \
+  --n_obj 2 \
+  --problem_name "DTLZ2" \
+  --alg "BNSGA2" \
+  --roi_type "roi-c" \
+  --ref_points '[[0.2, 0.5], [0.8, 0.1]]' \
+  --roi_radius '[[0.1, 0.1], [0.1, 0.1]]' \
+  --run_id 0
+```
+An example visualization is shown below:
+<img width="1950" height="1950" alt="DTLZ2_BNSGA2_roi-c_run0" src="https://github.com/user-attachments/assets/088d82b9-01e7-4c81-9f31-06d9bda5f2b9" />
+
+
+---
+
 ## Meaning of the Example Arguments
 
 * `--n_obj`  

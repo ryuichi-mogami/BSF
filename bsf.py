@@ -17,12 +17,11 @@ def normalize(F, ideal, nadir):
     return (F - ideal) / denom
 
 def asf(F, ref_point, w):
-    # calculate the ASF value
-    asf_values = np.full(len(F), np.inf)
-    for i in range(len(F)):
-        asf_values[i] = np.max(w[i]*(F[i] - ref_point))
-    
-    return asf_values
+    F = np.asarray(F, dtype=float)
+    ref_point = np.asarray(ref_point, dtype=float)
+    w = np.asarray(w, dtype=float)
+
+    return np.max(w * (F - ref_point), axis=1)
 
 class BSF(Survival):
     """
@@ -74,23 +73,23 @@ class BSF(Survival):
             dist_to_pivot = np.linalg.norm(F - pivot_point, axis=1)
             return sel_mask, dist_to_pivot
 
-        elif self.roi_type == "roi-a":
-            nd_idx = find_non_dominated(F)
+    elif self.roi_type == "roi-a":
+        nd_idx = find_non_dominated(F)
 
-            asf_arr = np.full(len(F), np.inf)
-            w = np.ones_like(F)
-            asf_arr = asf(F[nd_idx], ref_point, w)
+        w = np.ones(F.shape[1]) / F.shape[1]
 
-            pivot_local_idx = np.argmin(asf_arr)
-            pivot_idx = nd_idx[pivot_local_idx]
-            pivot_point = F[pivot_idx]
+        asf_arr = asf(F[nd_idx], ref_point, w)
 
-            dist_arr_pivot = F - pivot_point
+        pivot_local_idx = np.argmin(asf_arr)
+        pivot_idx = nd_idx[pivot_local_idx]
+        pivot_point = F[pivot_idx]
 
-            val = np.sum((dist_arr_pivot/roi_radius)**2, axis=1)
-            sel_mask = val <= 1.0
-            dist_to_pivot = np.linalg.norm(F - pivot_point, axis=1)
-            return sel_mask, dist_to_pivot
+        dist_arr_pivot = F - pivot_point
+
+        val = np.sum((dist_arr_pivot / roi_radius) ** 2, axis=1)
+        sel_mask = val <= 1.0
+        dist_to_pivot = np.linalg.norm(F - pivot_point, axis=1)
+    return sel_mask, dist_to_pivot
         elif self.roi_type == "roi-p":
             less_eq = np.all(F <= ref_point, axis=1)
             greater_eq = np.all(F >= ref_point, axis=1)

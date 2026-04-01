@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import sys
-sys.path.insert(0, os.path.abspath("./pymoo"))
+sys.path.insert(0, os.path.abspath("../pymoo"))
 from pymoo.core.population import Population
 from pymoo.core.survival import Survival
 from pymoo.util.nds.non_dominated_sorting import find_non_dominated

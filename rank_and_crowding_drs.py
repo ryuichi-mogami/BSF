@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import os
-sys.path.insert(0, os.path.abspath("./pymoo"))
+sys.path.insert(0, os.path.abspath("../pymoo"))
 from pymoo.operators.survival.rank_and_crowding import RankAndCrowding
 from pymoo.util.randomized_argsort import randomized_argsort
 from pymoo.util.nds.non_dominated_sorting import NonDominatedSorting

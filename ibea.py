@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import os
-sys.path.insert(0, os.path.abspath("./pymoo"))
+sys.path.insert(0, os.path.abspath("../pymoo"))
 from pymoo.algorithms.base.genetic import GeneticAlgorithm
 from pymoo.core.population import Population
 from pymoo.core.survival import Survival

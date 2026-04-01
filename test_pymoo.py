@@ -3,7 +3,7 @@ import sys
 import click
 import json
 
-
+sys.path.insert(0, os.path.abspath("../pymoo"))
 from bsf import BSF
 from rank_and_crowding_drs import RankAndCrowdingDRS
 from pymoo.algorithms.moo.nsga2 import NSGA2

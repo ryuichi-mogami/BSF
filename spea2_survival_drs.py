@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import os
-sys.path.insert(0, os.path.abspath("./pymoo"))
+sys.path.insert(0, os.path.abspath("../pymoo"))
 from pymoo.core.survival import Survival
 from pymoo.util.dominator import Dominator
 from pymoo.util.misc import vectorized_cdist

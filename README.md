@@ -53,16 +53,16 @@ python3 test_pymoo.py \
 
 ## Meaning of the Example Arguments
 
-* `--n_obj 2`  
-  Sets the number of objectives to 2.
+* `--n_obj`  
+  Sets the number of objectives.
 
-* `--problem_name "DTLZ1"`  
-  Specifies `DTLZ1` as the benchmark optimization problem.
+* `--problem_name`  
+  Specifies the test problem.
 
-* `--alg "BMSPEA2"`  
-  Specifies the optimization algorithm to be used.
+* `--alg`  
+  Specifies the algorithm to be used.
 
-* `--roi_type "roi-c"`  
+* `--roi_type`  
   Specifies the ROI type.
 
 * `--ref_points '[[0.2, 0.5], [0.8, 0.1]]'`  

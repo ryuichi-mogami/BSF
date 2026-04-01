@@ -68,8 +68,22 @@ python3 plot.py \
   --run_id 0
 ```
 An example visualization is shown below:
-<img width="1950" height="1950" alt="DTLZ2_BNSGA2_roi-c_run0" src="https://github.com/user-attachments/assets/088d82b9-01e7-4c81-9f31-06d9bda5f2b9" />
-
+<p align="center">
+  <img
+    width="300"
+    height="300"
+    alt="DTLZ2_BNSGA2_roi-c_run0"
+    src="https://github.com/user-attachments/assets/088d82b9-01e7-4c81-9f31-06d9bda5f2b9"
+  />
+  <img
+    width="300"
+    height="300"
+    alt="DTLZ2_BNSGA2_roi-p_run0"
+    src="https://github.com/user-attachments/assets/f40b00a6-1882-41e1-841c-f127b5f6c6f2"
+  />
+  <br>
+  Example visualizations for the DTLZ2 problem using BNSGA2: ROI-C (left) and ROI-P (right).
+</p>
 
 ---
 

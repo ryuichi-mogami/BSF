@@ -4,7 +4,8 @@ import json
 import argparse
 
 sys.path.insert(0, os.path.abspath("../pymoo"))
-
+from pymoo.config import Config
+Config.warnings['not_compiled'] = False
 from bsf import BSF
 from rank_and_crowding_drs import RankAndCrowdingDRS
 from spea2_survival_drs import SPEA2SurvivalDRS
@@ -35,7 +36,6 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
         emo_max_fess = total_max_fess // len(ref_point)
 
     termination = get_termination("n_eval", emo_max_fess)
-    print(f"Termination condition: {termination}")
     if alg == "BNSGA2":
         if len(ref_point) == 1:
             algorithm1 = NSGA2(

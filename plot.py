@@ -12,6 +12,13 @@ sys.path.insert(0, os.path.abspath("./pymoo"))
 from pymoo.problems import get_problem
 from pymoo.util.ref_dirs import get_reference_directions
 
+def asf(F, ref_point, w):
+    F = np.asarray(F, dtype=float)
+    ref_point = np.asarray(ref_point, dtype=float)
+    w = np.asarray(w, dtype=float)
+
+    return np.max(w * (F - ref_point), axis=1)
+
 def load_result_csvs(result_dir, run_id, n_ref):
     data = []
 
@@ -98,7 +105,7 @@ def main(n_obj, problem_name, alg, roi_type, ref_points, roi_radius, run_id):
 
     ax.legend(handles=legend_handles, loc="lower left")
 
-    if roi_type == "roi-c":
+    if roi_type == "roi-c" or roi_type == "roi-a":
         pf_min = PF.min(axis=0)
         pf_max = PF.max(axis=0)
         span = pf_max - pf_min
@@ -108,10 +115,13 @@ def main(n_obj, problem_name, alg, roi_type, ref_points, roi_radius, run_id):
             z = np.asarray(z, dtype=float)
             r = np.asarray(r, dtype=float)
 
-            idx = np.argmin(np.linalg.norm(PF - z, axis=1))
-            pivot = PF[idx]
+            if roi_type == "roi-c":
+                idx = np.argmin(np.linalg.norm(PF - z, axis=1))
+            else:  # roi-a
+                w = np.ones_like(PF)
+                idx = np.argmin(asf(PF, z, w))
 
-            # ax.scatter(pivot[0], pivot[1], marker="s", s=120)
+            pivot = PF[idx]
 
             e = Ellipse(
                 xy=(pivot[0], pivot[1]),

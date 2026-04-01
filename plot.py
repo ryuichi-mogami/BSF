@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 from matplotlib.lines import Line2D
-sys.path.insert(0, os.path.abspath("./pymoo"))
+sys.path.insert(0, os.path.abspath("../pymoo"))
 
 from pymoo.problems import get_problem
 from pymoo.util.ref_dirs import get_reference_directions

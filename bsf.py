@@ -32,7 +32,7 @@ class BSF(Survival):
         ref_point is originally defined in the original space.
     roi_radius : float
         roi_radius should be in the original space.
-    inner_survival : Survival
+    inner_survival : Survival 
         Downstream survival operator, e.g. RankAndCrowding().
     
     """

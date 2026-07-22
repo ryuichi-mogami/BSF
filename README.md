@@ -69,7 +69,7 @@ python3 test_pymoo.py \
   --problem_name DTLZ1 \
   --alg BNSGA2 \
   --roi_type roi-c \
-  --space "original_space" \
+  --space original_space \
   --ref_points '[[0.2, 0.5], [0.8, 0.1]]' \
   --roi_radius '[[0.1, 0.1], [0.1, 0.1]]' \
   --run_id 0
@@ -89,7 +89,7 @@ python3 plot.py \
   --problem_name DTLZ2 \
   --alg BNSGA2 \
   --roi_type roi-c \
-  --space "original_space" \
+  --space original_space \
   --ref_points '[[0.2, 0.5], [0.8, 0.1]]' \
   --roi_radius '[[0.1, 0.1], [0.1, 0.1]]' \
   --run_id 0

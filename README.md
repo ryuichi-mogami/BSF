@@ -69,6 +69,7 @@ python3 test_pymoo.py \
   --problem_name DTLZ1 \
   --alg BNSGA2 \
   --roi_type roi-c \
+  --space "original_space" \
   --ref_points '[[0.2, 0.5], [0.8, 0.1]]' \
   --roi_radius '[[0.1, 0.1], [0.1, 0.1]]' \
   --run_id 0
@@ -88,6 +89,7 @@ python3 plot.py \
   --problem_name DTLZ2 \
   --alg BNSGA2 \
   --roi_type roi-c \
+  --space "original_space" \
   --ref_points '[[0.2, 0.5], [0.8, 0.1]]' \
   --roi_radius '[[0.1, 0.1], [0.1, 0.1]]' \
   --run_id 0
@@ -121,6 +123,7 @@ Example visualizations:
 | `--problem_name` | Test problem name. |
 | `--alg` | Optimization algorithm. |
 | `--roi_type` | ROI definition (e.g., `roi-c`, `roi-p`). |
+| `--space` | Presence or absence of normalization. |
 | `--ref_points` | Reference point(s). |
 | `--roi_radius` | Semi-axis lengths of each ROI. |
 | `--run_id` | Random seed (run identifier). |
@@ -140,39 +143,6 @@ defines two reference points.
 defines the corresponding ROI radii.
 
 ---
-
-## Repository Structure
-
-```
-BSF/
-├── algorithms/        # PBEMO implementations
-├── plot.py            # Visualization utility
-├── test_pymoo.py      # Example execution script
-└── ...
-```
-
----
-
-## Notes
-
-BSF is intended for researchers working on preference-based evolutionary multi-objective optimization, particularly in settings where one or more Regions of Interest are specified using reference-point-based preference articulation.
-
----
-
-## Citation
-
-If you use BSF in your research, please cite the corresponding publications.
-
-```
-@inproceedings{mogami2026gecco,
-  title={A Bi-Criteria Selection Framework for Incorporating Preference Information into Evolutionary Multi-objective Optimization},
-  author={Mogami, Ryuichi and Tanabe, Ryoji},
-  booktitle={Proceedings of the Genetic and Evolutionary Computation Conference (GECCO)},
-  year={2026}
-}
-```
-
-(Additional publications will be added as they become available.)
 
 ---
 

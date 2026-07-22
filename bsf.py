@@ -1,7 +1,6 @@
 import os
 import numpy as np
-import sys
-sys.path.insert(0, os.path.abspath("../pymoo"))
+
 from pymoo.core.population import Population
 from pymoo.core.survival import Survival
 from pymoo.util.nds.non_dominated_sorting import find_non_dominated
@@ -17,27 +16,30 @@ def normalize(F, ideal, nadir):
     return (F - ideal) / denom
 
 def asf(F, ref_point, w):
-    F = np.asarray(F, dtype=float)
-    ref_point = np.asarray(ref_point, dtype=float)
-    w = np.asarray(w, dtype=float)
-
-    return np.max(w * (F - ref_point), axis=1)
+    # calculate the ASF value
+    asf_values = np.full(len(F), np.inf)
+    for i in range(len(F)):
+        asf_values[i] = np.max(w[i]*(F[i] - ref_point))
+    
+    return asf_values
 
 class BSF(Survival):
     """
     Parameters
     ----------
     roi_type : {"roi-c", "roi-a", "roi-p"}
+    space : {"normalized_space", "original_space"}
     ref_point : array-like
-        ref_point is originally defined in the original space.
+        ref_point is originally defined in the original space, but if space is "normalized_space" it will be normalized internally.
     roi_radius : float
-        roi_radius should be in the original space.
-    inner_survival : Survival 
+        if space is "normalized_space", roi_radius shoud be [0, 1], and space is "original_space", roi_radius should be in the original space.
+    inner_survival : Survival
         Downstream survival operator, e.g. RankAndCrowding().
     
     """
     def __init__(self, 
                 roi_type,
+                space, 
                 ref_point, 
                 roi_radius,
                 inner_survival):
@@ -46,8 +48,8 @@ class BSF(Survival):
         self.roi_type = roi_type
         self.ref_point = ref_point
         self.roi_radius = roi_radius
+        self.space = space
         self.inner_survival = inner_survival
-        self.opt = []
 
     def select_roi(self, F, ref_point, roi_radius):
         if self.roi_type == "roi-c":
@@ -76,17 +78,15 @@ class BSF(Survival):
         elif self.roi_type == "roi-a":
             nd_idx = find_non_dominated(F)
 
-            w = np.ones(F.shape[1], dtype=float)
+            asf_arr = np.full(len(F), np.inf)
+            w = np.ones_like(F)
+            asf_arr = asf(F, ref_point, w)
 
-            asf_arr = asf(F[nd_idx], ref_point, w)
-
-            pivot_local_idx = np.argmin(asf_arr)
-            pivot_idx = nd_idx[pivot_local_idx]
+            pivot_idx = np.argmin(asf_arr)
             pivot_point = F[pivot_idx]
-
             dist_arr_pivot = F - pivot_point
 
-            val = np.sum((dist_arr_pivot / roi_radius) ** 2, axis=1)
+            val = np.sum((dist_arr_pivot/roi_radius)**2, axis=1)
             sel_mask = val <= 1.0
             dist_to_pivot = np.linalg.norm(F - pivot_point, axis=1)
             return sel_mask, dist_to_pivot
@@ -102,8 +102,20 @@ class BSF(Survival):
         
     def _do(self, problem, pop, *args, n_survive=None, **kwargs):
         F = pop.get("F").astype(float, copy=False)
-        F_work = F
-        ref_point_work = self.ref_point
+
+        # normalize the objective values if needed
+        if self.space == "normalized_space":
+            nd_idx = find_non_dominated(F)
+            F_nd = F[nd_idx]
+            ideal = np.min(F_nd, axis=0)
+            nadir = np.max(F_nd, axis=0)
+            F_work = normalize(F, ideal, nadir)
+            ref_point_work = normalize(self.ref_point, ideal, nadir)
+        elif self.space == "original_space":
+            F_work = F
+            ref_point_work = self.ref_point
+        else:
+            raise ValueError("Unknown space! {} is not supported.".format(self.space))
         # check whether F is in the ROI
         sel_mask, dist_metric = self.select_roi(F_work, ref_point_work, self.roi_radius)
 
@@ -119,12 +131,10 @@ class BSF(Survival):
                 selected_idx.extend(order[:remaining].tolist())
             
             survivors = pop[selected_idx]
-            survivors = Population.create(*survivors)
-            self.opt = survivors
-            return survivors
+
+            return Population.create(*survivors)
         
         # if the number of solutions in the ROI is greater than n_survive
         trimmed_pop = pop[sel_mask]
-        survivors = self.inner_survival.do(problem=problem, pop=trimmed_pop, n_survive=n_survive)
-        self.opt = survivors
-        return survivors
+
+        return self.inner_survival.do(problem=problem, pop=trimmed_pop, n_survive=n_survive)

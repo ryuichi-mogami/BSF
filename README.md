@@ -1,49 +1,74 @@
 # BSF: Bi-criteria Selection Framework
 
-BSF is a framework for incorporating preference information into evolutionary multi-objective optimization algorithms.
-Built on top of `pymoo`, it is designed to provide a unified basis for implementing and studying PBEMO algorithms.
+BSF is a framework for incorporating preference information into evolutionary multi-objective optimization algorithms (EMOAs). Built on top of `pymoo`, it provides a unified framework for implementing and studying preference-based evolutionary multi-objective optimization (PBEMO) algorithms.
 
 ---
 
 ## Overview
 
-BSF supports preference-based evolutionary multi-objective optimization using Regions of Interest (ROI) defined with respect to reference points.
+BSF supports preference-based evolutionary multi-objective optimization using Regions of Interest (ROIs) defined with respect to reference points.
+
+### Features
+
+- Plug-in framework for incorporating preference information into EMOAs
+- Support for multiple ROI definitions (e.g., ROI-C and ROI-P)
+- Multiple reference points
+- Visualization utilities for ROIs and optimization results
+- Flexible specification of the objective space in which the ROI is defined
+
+---
+
+## Versioning
+
+The latest documentation describes the current stable release.
+
+For previous releases and version-specific changes, please refer to the **GitHub Releases** page.
 
 ---
 
 ## Requirements
 
-* Python 3
-* `pymoo==0.6.1.5`
-* BSF repository
+- Python 3
+- `pymoo==0.6.1.5`
+- BSF repository
 
 BSF is designed to work with a locally placed clone of `pymoo==0.6.1.5`.
+
 Therefore, **`pymoo` and BSF must be cloned under the same parent directory.**
 
 ---
 
 ## Installation
 
-Clone `pymoo` and BSF into the same parent directory as follows:
+Clone `pymoo` and BSF into the same parent directory.
 
 ```bash
 git clone -b 0.6.1.5 https://github.com/anyoptimization/pymoo.git
 git clone https://github.com/ryuichi-mogami/BSF.git
 ```
 
+The directory structure should look like
+
+```
+parent_directory/
+├── pymoo/
+└── BSF/
+```
+
 ---
 
 ## Usage
 
-Move to the BSF directory and run `test_pymoo.py`:
+Move to the BSF directory and execute `test_pymoo.py`.
 
 ```bash
 cd BSF
+
 python3 test_pymoo.py \
   --n_obj 2 \
-  --problem_name "DTLZ1" \
-  --alg "BNSGA2" \
-  --roi_type "roi-c" \
+  --problem_name DTLZ1 \
+  --alg BNSGA2 \
+  --roi_type roi-c \
   --ref_points '[[0.2, 0.5], [0.8, 0.1]]' \
   --roi_radius '[[0.1, 0.1], [0.1, 0.1]]' \
   --run_id 0
@@ -53,64 +78,104 @@ python3 test_pymoo.py \
 
 ## Visualization
 
-BSF also provides a visualization script for inspecting the relationship between the obtained solutions, reference points, and the corresponding regions of interest.
+BSF provides a visualization utility for inspecting the obtained solutions, reference points, and corresponding Regions of Interest.
 
-For example, the following command generates a plot for a two-objective DTLZ2 problem:
+For example,
 
 ```bash
 python3 plot.py \
   --n_obj 2 \
-  --problem_name "DTLZ2" \
-  --alg "BNSGA2" \
-  --roi_type "roi-c" \
+  --problem_name DTLZ2 \
+  --alg BNSGA2 \
+  --roi_type roi-c \
   --ref_points '[[0.2, 0.5], [0.8, 0.1]]' \
   --roi_radius '[[0.1, 0.1], [0.1, 0.1]]' \
   --run_id 0
 ```
-An example visualization is shown below:
+
+Example visualizations:
+
 <p align="center">
   <img
     width="300"
-    height="300"
-    alt="DTLZ2_BNSGA2_roi-c_run0"
+    alt="ROI-C"
     src="https://github.com/user-attachments/assets/088d82b9-01e7-4c81-9f31-06d9bda5f2b9"
   />
   <img
     width="300"
-    height="300"
-    alt="DTLZ2_BNSGA2_roi-p_run0"
+    alt="ROI-P"
     src="https://github.com/user-attachments/assets/f40b00a6-1882-41e1-841c-f127b5f6c6f2"
   />
   <br>
-  Example visualizations for the DTLZ2 problem using BNSGA2: ROI-C (left) and ROI-P (right).
+  Example results on the DTLZ2 problem using BNSGA2.
+  Left: ROI-C. Right: ROI-P.
 </p>
 
 ---
 
-## Meaning of the Example Arguments
+## Command-Line Arguments
 
-* `--n_obj`  
-  Sets the number of objectives.
+| Argument | Description |
+|----------|-------------|
+| `--n_obj` | Number of objectives. |
+| `--problem_name` | Test problem name. |
+| `--alg` | Optimization algorithm. |
+| `--roi_type` | ROI definition (e.g., `roi-c`, `roi-p`). |
+| `--ref_points` | Reference point(s). |
+| `--roi_radius` | Semi-axis lengths of each ROI. |
+| `--run_id` | Random seed (run identifier). |
 
-* `--problem_name`  
-  Specifies the test problem.
+Example:
 
-* `--alg`  
-  Specifies the algorithm to be used.
+```text
+--ref_points '[[0.2, 0.5], [0.8, 0.1]]'
+```
 
-* `--roi_type`  
-  Specifies the ROI type.
+defines two reference points.
 
-* `--ref_points '[[0.2, 0.5], [0.8, 0.1]]'`  
-  Specifies the reference points. 
+```text
+--roi_radius '[[0.1, 0.1], [0.1, 0.1]]'
+```
 
-* `--roi_radius '[[0.1, 0.1], [0.1, 0.1]]'`  
-  Specifies the semi-axis lengths of the ROI associated with each reference point.
+defines the corresponding ROI radii.
 
-* `--run_id 0`
+---
+
+## Repository Structure
+
+```
+BSF/
+├── algorithms/        # PBEMO implementations
+├── plot.py            # Visualization utility
+├── test_pymoo.py      # Example execution script
+└── ...
+```
 
 ---
 
 ## Notes
 
-This framework is intended for researchers working on preference-based evolutionary multi-objective optimization, particularly in settings where reference-point-based preference articulation is used to define one or more ROIs.
+BSF is intended for researchers working on preference-based evolutionary multi-objective optimization, particularly in settings where one or more Regions of Interest are specified using reference-point-based preference articulation.
+
+---
+
+## Citation
+
+If you use BSF in your research, please cite the corresponding publications.
+
+```
+@inproceedings{mogami2026gecco,
+  title={A Bi-Criteria Selection Framework for Incorporating Preference Information into Evolutionary Multi-objective Optimization},
+  author={Mogami, Ryuichi and Tanabe, Ryoji},
+  booktitle={Proceedings of the Genetic and Evolutionary Computation Conference (GECCO)},
+  year={2026}
+}
+```
+
+(Additional publications will be added as they become available.)
+
+---
+
+## License
+
+Please add an appropriate license (e.g., MIT License) before public distribution.

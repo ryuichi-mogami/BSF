@@ -24,7 +24,7 @@ from pymoo.optimize import minimize
 import numpy as np
 
 
-def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
+def run(n_obj, problem_name, alg, run_id, roi_type, space, ref_point, roi_radius):
     total_max_fess = 50000
     problem = get_problem(problem_name, n_obj=n_obj)
 
@@ -33,7 +33,9 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
     if len(ref_point) == 1:
         emo_max_fess = total_max_fess
     else:
+        print(len(ref_point))
         emo_max_fess = total_max_fess // len(ref_point)
+        print(emo_max_fess)
 
     termination = get_termination("n_eval", emo_max_fess)
     if alg == "BNSGA2":
@@ -43,6 +45,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                 selection=RandomSelection(),
                 survival=BSF(
                     roi_type=roi_type,
+                    space = space,
                     ref_point=ref_point[0],
                     roi_radius=roi_radius[0],
                     inner_survival=RankAndCrowdingDRS(alpha=0)
@@ -56,6 +59,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                     selection=RandomSelection(),
                     survival=BSF(
                         roi_type=roi_type,
+                        space = space,
                         ref_point=ref_point[i],
                         roi_radius=roi_radius[i],
                         inner_survival=RankAndCrowdingDRS(alpha=0)
@@ -70,6 +74,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                 selection=RandomSelection(),
                 survival=BSF(
                     roi_type=roi_type,
+                    space = space,
                     ref_point=ref_point[0],
                     roi_radius=roi_radius[0],
                     inner_survival=RankAndCrowdingDRS(alpha=0.1)
@@ -83,6 +88,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                     selection=RandomSelection(),
                     survival=BSF(
                         roi_type=roi_type,
+                        space = space,
                         ref_point=ref_point[i],
                         roi_radius=roi_radius[i],
                         inner_survival=RankAndCrowdingDRS(alpha=0.1)
@@ -98,6 +104,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                 selection=RandomSelection(),
                 survival=BSF(
                     roi_type=roi_type,
+                    space = space,
                     ref_point=ref_point[0],
                     roi_radius=roi_radius[0],
                     inner_survival=LeastHypervolumeContributionSurvival()
@@ -112,6 +119,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                     selection=RandomSelection(),
                     survival=BSF(
                         roi_type=roi_type,
+                        space = space,
                         ref_point=ref_point[i],
                         roi_radius=roi_radius[i],
                         inner_survival=LeastHypervolumeContributionSurvival()
@@ -126,6 +134,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                 selection=RandomSelection(),
                 survival=BSF(
                     roi_type=roi_type,
+                    space = space,
                     ref_point=ref_point[0],
                     roi_radius=roi_radius[0],
                     inner_survival=FitnessAssignment()
@@ -139,6 +148,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                     selection=RandomSelection(),
                     survival=BSF(
                         roi_type=roi_type,
+                        space = space,
                         ref_point=ref_point[i],
                         roi_radius=roi_radius[i],
                         inner_survival=FitnessAssignment()
@@ -156,6 +166,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                 selection=RandomSelection(),
                 survival=BSF(
                     roi_type=roi_type,
+                    space = space,
                     ref_point=ref_point[0],
                     roi_radius=roi_radius[0],
                     inner_survival=ReferenceDirectionSurvival(ref_dirs)
@@ -170,6 +181,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                     selection=RandomSelection(),
                     survival=BSF(
                         roi_type=roi_type,
+                        space = space,
                         ref_point=ref_point[i],
                         roi_radius=roi_radius[i],
                         inner_survival=ReferenceDirectionSurvival(ref_dirs)
@@ -184,6 +196,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                 selection=RandomSelection(),
                 survival=BSF(
                     roi_type=roi_type,
+                    space = space,
                     ref_point=ref_point[0],
                     roi_radius=roi_radius[0],
                     inner_survival=SPEA2SurvivalDRS(alpha=0)
@@ -197,6 +210,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                     selection=RandomSelection(),
                     survival=BSF(
                         roi_type=roi_type,
+                        space = space,
                         ref_point=ref_point[i],
                         roi_radius=roi_radius[i],
                         inner_survival=SPEA2SurvivalDRS(alpha=0)
@@ -211,6 +225,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                 selection=RandomSelection(),
                 survival=BSF(
                     roi_type=roi_type,
+                    space = space,
                     ref_point=ref_point[0],
                     roi_radius=roi_radius[0],
                     inner_survival=SPEA2SurvivalDRS(alpha=0.1)
@@ -224,6 +239,7 @@ def run(n_obj, problem_name, alg, run_id, roi_type, ref_point, roi_radius):
                     selection=RandomSelection(),
                     survival=BSF(
                         roi_type=roi_type,
+                        space = space,
                         ref_point=ref_point[i],
                         roi_radius=roi_radius[i],
                         inner_survival=SPEA2SurvivalDRS(alpha=0.1)
@@ -266,6 +282,7 @@ if __name__ == '__main__':
     parser.add_argument('--problem_name', type=str)
     parser.add_argument('--alg', type=str)
     parser.add_argument('--roi_type', type=str)
+    parser.add_argument('--space', type=str)
     parser.add_argument('--ref_points', type=str)
     parser.add_argument('--roi_radius', type=str)
     parser.add_argument('--run_id', type=int)
@@ -275,8 +292,9 @@ if __name__ == '__main__':
     problem_name = args.problem_name
     alg = args.alg
     roi_type = args.roi_type
+    space = args.space
     ref_points = json.loads(args.ref_points)
     roi_radius = json.loads(args.roi_radius)
     run_id = args.run_id
 
-    run(n_obj, problem_name, alg, run_id, roi_type, ref_points, roi_radius)
+    run(n_obj, problem_name, alg, run_id, roi_type, space, ref_points, roi_radius)

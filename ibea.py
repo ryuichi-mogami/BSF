@@ -46,7 +46,14 @@ class FitnessAssignment(Survival):
         # the final indices of surviving individuals
         survivor_list = list(range(PQ_size))
 
-        normalized_F = (F - ideal) / (nadir - ideal)
+        objective_range = nadir - ideal
+        normalized_F = np.zeros_like(F, dtype=float)
+        np.divide(
+            F - ideal,
+            objective_range,
+            out=normalized_F,
+            where=objective_range > 0.0,
+        )
 
         if self.bq_indicator == "epsilon":
             # epsilon_matrix = np.zeros((pop_size, pop_size))    
@@ -59,7 +66,11 @@ class FitnessAssignment(Survival):
         else:
             raise ValueError(f"{self.bq_indicator} is not available")
             
-        bqi_max = np.max(bqi_matrix)
+        bqi_max = np.max(np.abs(bqi_matrix))
+        if bqi_max == 0.0:
+            # All objective vectors are identical. Their pairwise indicator
+            # contribution is zero, so any deterministic removal order is valid.
+            bqi_max = 1.0
         fitness_arr = np.zeros(PQ_size)
         for i in range(PQ_size):
             for j in range(PQ_size):            
@@ -68,13 +79,13 @@ class FitnessAssignment(Survival):
                     
         while len(survivor_list) > n_survive:
             # The worst individual is removed from P \cup Q
-            worst_id = np.argmin(fitness_arr)
+            active = np.asarray(survivor_list, dtype=int)
+            worst_id = active[np.argmin(fitness_arr[active])]
             fitness_arr[worst_id] = np.inf
             survivor_list.remove(worst_id) 
             # Update the fitness values
-            for i in range(PQ_size):
-                if i != worst_id:
-                    fitness_arr[i] += np.exp(-bqi_matrix[worst_id][i] / (bqi_max * self.kappa))
+            for i in survivor_list:
+                fitness_arr[i] += np.exp(-bqi_matrix[worst_id][i] / (bqi_max * self.kappa))
                     
         for i in range(PQ_size):        
             pop[i].set("fitness", fitness_arr[i])
